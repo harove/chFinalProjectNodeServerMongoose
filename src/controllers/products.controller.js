@@ -7,7 +7,7 @@ export async function postController(req, res) {
     try {
         const entity = await manager.create(pojo)
         res['newProduct']()
-        // res.json(pojo)
+        // res.status(201).json(pojo)
         res.status(201).json(entity.toObject())
     } catch (error) {
         res.status(400).json({message:error.message})
@@ -39,8 +39,14 @@ export async function updateController(req, res) {
     const id = req.params.id
     const fields = req.body
     try {
-        const pojos = await manager.update(id,fields)
-        res.json(pojos)
+        // const pojos = await manager.update(id,fields)
+        // res.json(pojos)
+        const actualizado = await manager.findByIdAndUpdate(id, {$set: fields}, { new: true})
+        console.log({actualizado})
+        if (!actualizado){
+            res.status(404).json({message: 'usuario no encontrado'})
+        }
+        res.json({actualizado})
     } catch (error) {
         res.status(404).json({
             mensaje: error.message
