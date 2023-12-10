@@ -20,3 +20,7 @@ webRouter.get('/realtimeproducts', async (req, res) => {
         titulo: 'Realtime Products'
     });
 });
+
+webRouter.get('/chat', (req,res)=>{
+    res.render('chat.handlebars', {titulo:'Chat'})
+})
