@@ -3,7 +3,8 @@ import { apiRouter } from './routers/api.router.js'
 import handlebars from 'express-handlebars'
 import { webRouter } from './routers/web.Router.js'
 import {Server} from 'socket.io'
-import { productsManager } from './dao/productsManager.js'
+// import { productsManager } from './dao/productsManager.js'
+import { productsManager } from './dao/index.js'
 
 // import {  } from './midlewares/midlewares.js'
 
@@ -27,7 +28,8 @@ const websocketServer = new Server(server)
 
 app.use((req,res,next)=>{
     res['newProduct'] = async()=>{
-        const products = await productsManager.findAll()
+        // const products = await productsManager.findAll()
+        const products = await productsManager.find().lean()
         websocketServer.emit('newProduct', {products} )
     }
     next()
