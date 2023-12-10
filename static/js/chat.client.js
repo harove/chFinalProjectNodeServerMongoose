@@ -62,9 +62,9 @@ function iniciarChat(username){
 
     socket.on('mensajes', mensajes=>{
         ulMensajes.innerHTML = ''
-        for(const {timestamp, usuario, texto} of mensajes ){
+        for(const {timestamp, user, message} of mensajes ){
             const li = document.createElement('li')
-            li.innerHTML = `${usuario}: ${texto}`
+            li.innerHTML = `${user}: ${message}`
             ulMensajes?.appendChild(li)
         }
     })

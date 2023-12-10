@@ -11,3 +11,4 @@ try {
 
 
 export {manager as productsManager} from './product.js'
+export {managerMessage as messagesManager} from './message.js'

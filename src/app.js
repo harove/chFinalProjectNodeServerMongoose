@@ -4,8 +4,7 @@ import handlebars from 'express-handlebars'
 import { webRouter } from './routers/web.Router.js'
 import {Server} from 'socket.io'
 // import { productsManager } from './dao/productsManager.js'
-import { productsManager } from './dao/index.js'
-import { mensajesManager } from './dao/mensajesManager.js'
+import { productsManager, messagesManager } from './dao/index.js'
 
 // import {  } from './midlewares/midlewares.js'
 
@@ -49,19 +48,25 @@ app.use((req, res, next) => {
 
 
 webSocketServer.on('connection', async (socket) => {
-    console.log(socket.id)
-    console.log(socket.handshake.auth.username)
+    console.log({socket:socket.id})
+    console.log({user: socket.handshake.auth.username})
     socket.broadcast.emit('nuevoUsuario', socket.handshake.auth.username)
 
-    socket.emit('mensajes', await mensajesManager.findAll())
+    socket.emit('mensajes', await messagesManager.find().lean())
 
     socket.on('mensaje', async mensaje => {
-        console.log({mensaje})
-        await mensajesManager.create({ 
-            usuario: socket.handshake.auth.username, 
-            texto: mensaje.mensaje })
+        console.log({mensaje, usuario:socket.handshake.auth.username})
 
-        webSocketServer.emit('mensajes', await mensajesManager.findAll())
+    try {
+        await messagesManager.create({ 
+            user: socket.handshake.auth.username, 
+            message: mensaje.mensaje 
+        })
+    } catch (error) {
+        console.error('Error creating message:', error.message);
+    }
+
+        webSocketServer.emit('mensajes', await messagesManager.find().lean())
     })
 
 
