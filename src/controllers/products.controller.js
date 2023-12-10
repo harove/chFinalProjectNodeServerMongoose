@@ -1,26 +1,32 @@
-import { productsManager as manager } from "../services/productsManager.js"
+// import { productsManager as manager } from "../dao/productsManager.js"
+import { productsManager as manager } from "../dao/index.js"
+
 
 export async function postController(req, res) {
     const pojo = req.body
     try {
-        await manager.create(pojo)
+        const entity = await manager.create(pojo)
         res['newProduct']()
-        res.json(pojo)
+        // res.json(pojo)
+        res.status(201).json(entity.toObject())
     } catch (error) {
-        res.json({message:error.message})
+        res.status(400).json({message:error.message})
     }
 }
 
+
 export async function getController(req, res) {
     const {limit} = req.query
-    const pojos = await manager.findAll({limit})
+    // const pojos = await manager.findAll({limit})
+    const pojos = await manager.find().lean()
     res.json(pojos)
 }
 
 export async function getByIdController(req, res) {
     const id = req.params.id
     try {
-        const pojo = await manager.getById(id)
+        // const pojo = await manager.getById(id)
+        const pojo = await manager.findById({_id: id}).lean()
         res.json(pojo)
     } catch (error) {
         res.status(404).json({
@@ -45,9 +51,13 @@ export async function updateController(req, res) {
 export async function deleteController(req, res) {
     const id = req.params.id
     try {
-        const pojos = await manager.delete(id)
+        // const pojo = await manager.delete(id)
+        const pojo = await manager.findByIdAndDelete(id)
+        if (!pojo){
+            res.status(404).json({message: 'usuario no encontrado'})
+        }
         res['newProduct']()
-        res.json(pojos)
+        res.json(pojo)
     } catch (error) {
         res.status(404).json({
             mensaje: error.message

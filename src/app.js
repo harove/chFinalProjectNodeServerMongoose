@@ -3,7 +3,7 @@ import { apiRouter } from './routers/api.router.js'
 import handlebars from 'express-handlebars'
 import { webRouter } from './routers/web.Router.js'
 import {Server} from 'socket.io'
-import { productsManager } from './services/productsManager.js'
+import { productsManager } from './dao/productsManager.js'
 
 // import {  } from './midlewares/midlewares.js'
 

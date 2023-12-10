@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { productsManager } from '../services/productsManager.js';
+import { productsManager } from '../dao/productsManager.js';
 
+productsManager
 export const webRouter = Router();
 webRouter.get('/products', async (req, res) => {
     const products = await productsManager.findAll();

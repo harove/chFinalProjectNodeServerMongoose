@@ -1,5 +1,5 @@
-import { notNegative } from '../helpers/notNegative.js';
-import { notNull } from '../helpers/notNull.js';
+import { notNegative } from '../../helpers/notNegative.js';
+import { notNull } from '../../helpers/notNull.js';
 
 export class Product {
     constructor({id, code, title, description, price, thumbnails = [], status = true,  stock = 0, category }) {

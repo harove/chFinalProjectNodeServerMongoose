@@ -1,4 +1,4 @@
-import { notNull } from '../helpers/notNull.js';
+import { notNull } from '../../helpers/notNull.js';
 
 export class Cart {
     constructor({id, products }) {

@@ -1,4 +1,4 @@
-import { cartsManager as manager } from "../services/cartsManager.js"
+import { cartsManager as manager } from "../dao/cartsManager.js"
 
 //para crear el carrito
 export async function postController(req, res) {
