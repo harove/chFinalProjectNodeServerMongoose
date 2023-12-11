@@ -1,20 +1,24 @@
-import { cartsManager as manager } from "../dao/cartsManager.js"
+// import { cartsManager as manager } from "../dao/cartsManager.js"
+import { cartsManager as manager } from "../dao/index.js"
 
-//para crear el carrito
+//creating cart
 export async function postController(req, res) {
     const pojo = req.body
-    manager.create(pojo)
-    const pojos = await manager.findAll()
+    await manager.create(pojo)
+    // const pojos = await manager.findAll()
+    const pojos = await manager.find().lean()
     pojos.push(pojo)
     res.json(pojo)
 }
 
-//listar productos en el carrito
+//listing products in cart x
 export async function getByIdController(req, res) {
     const id = req.params.id
     try {
-        const pojo = await manager.listProductsInCart(id)
-        res.json(pojo)
+        // const pojo = await manager.listProductsInCart(id)
+        const pojo = await manager.find({_id: id})
+        // res.json(pojo)
+        res.json(pojo.products)
     } catch (error) {
         res.status(404).json({
             mensaje: error.message
@@ -27,6 +31,7 @@ export async function addProductToCartController(req, res) {
     const cid = req.params.cid
     const pid = req.params.pid   
     try {
+        // const pojo = await manager.addProductToCart({cid,pid})
         const pojo = await manager.addProductToCart({cid,pid})
         res.json(pojo)
     } catch (error) {
@@ -38,11 +43,14 @@ export async function addProductToCartController(req, res) {
 
 
 
-//adicionales al desafio para otras funcionalidades
+//additional to the challenge. 
+
+//listing carts
 
 export async function getController(req, res) {
     const {limit} = req.query
-    const pojos = await manager.findAll({limit})
+    // const pojos = await manager.findAll({limit})
+    const pojos = await manager.find().limit(limit)
     res.json(pojos)
 }
 
