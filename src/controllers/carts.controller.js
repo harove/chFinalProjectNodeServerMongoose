@@ -4,11 +4,19 @@ import { cartsManager as manager } from "../dao/index.js"
 //creating cart
 export async function postController(req, res) {
     const pojo = req.body
-    await manager.create(pojo)
-    // const pojos = await manager.findAll()
-    const pojos = await manager.find().lean()
-    pojos.push(pojo)
-    res.json(pojo)
+    console.log('post')
+    try {
+        const document = await manager.create(pojo)
+        console.log({document})
+        // const pojos = await manager.findAll()
+        const pojos = await manager.find().lean()
+        pojos.push(pojo)
+        res.json(document.toObject())
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
 }
 
 //listing products in cart x
@@ -18,7 +26,7 @@ export async function getByIdController(req, res) {
         // const pojo = await manager.listProductsInCart(id)
         const pojo = await manager.find({_id: id})
         // res.json(pojo)
-        res.json(pojo.products)
+        res.json(pojo)
     } catch (error) {
         res.status(404).json({
             mensaje: error.message
@@ -32,8 +40,10 @@ export async function addProductToCartController(req, res) {
     const pid = req.params.pid   
     try {
         // const pojo = await manager.addProductToCart({cid,pid})
-        const pojo = await manager.addProductToCart({cid,pid})
-        res.json(pojo)
+        const cart = await manager.findById(cid)
+        cart.products.push(pid)
+        cart.save()
+        res.json(cart)
     } catch (error) {
         res.status(404).json({
             mensaje: error.message

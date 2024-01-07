@@ -3,10 +3,10 @@ import { getController, postController, getByIdController, updateController, del
 
 
 export const cartsRouter = Router()
-cartsRouter.get('/:id', getByIdController)
+cartsRouter.post('/', postController)
 cartsRouter.get('/', getController)
 cartsRouter.post('/:cid/product/:pid', addProductToCartController)
-cartsRouter.post('/', postController)
+cartsRouter.get('/:id', getByIdController)
 cartsRouter.put('/:id', updateController)
 cartsRouter.delete('/:id', deleteController)
 
